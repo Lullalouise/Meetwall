@@ -120,7 +120,7 @@ if (kinect) {
         // The user is fresh
         println("New user just walked in, activating interactive Kinect app");
         reset();
-        kinectApp = (kinectApp + 1) % NUM_KINECT_APPS
+        kinectApp = (kinectApp + 1) % NUM_KINECT_APPS;
         userDetected = true;
     } else {
       // The user was here before, keep running the Kinect anim

@@ -28,7 +28,7 @@ class Fluid {
     initTUIO();
   }
 
-void userMoved(X, Y, oldX, oldY) {
+void userMoved(float X, float Y, float oldX, float oldY) {
     float normX = X * invWidth;
     float normY = Y * invHeight;
     float velX = (X - oldX) * invWidth;
@@ -49,11 +49,11 @@ void updateCells() {
     } 
 }
 
-byte convertToTileAngle(grayscale) {
+byte convertToTileAngle(int grayscale) {
   return byte(int((90 * grayscale) / 256.));
 }
 
-float converToTileHeight(grayscale) {
+float converToTileHeight(int grayscale) {
   return (l * grayscale) / (256. * 2.0);
 }
 // add force and dye to fluid, and create particles
@@ -91,5 +91,6 @@ float RGBToGrayScale(float R, float G, float B) {
   float res = .2126 * pow(R, gamma) + .7152 * pow(G, gamma) + .0722 * pow(B, gamma);
   return res;
 }
+};
 
 

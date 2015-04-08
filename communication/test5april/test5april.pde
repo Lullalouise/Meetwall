@@ -4,11 +4,11 @@ byte b;
 int a=0;
 Client c;
 void setup(){
-  c = new Client(this,"192.168.1.14", 9999);
+  c = new Client(this,"192.168.2.1", 9999);
 }
  
 void draw(){
-  frameRate(10);
+  frameRate(0.5);
   b =byte(a);
 
 
@@ -17,14 +17,14 @@ void draw(){
 }
     if(!c.active()){
        println("CLIENT GOT DISCONNECTED"+ a);
-        c = new Client(this,"192.168.1.14", 9999);
+        c = new Client(this,"192.168.2.1", 9999);
     }  
     
      c.write(buffer);
      
-  a+=20;
+  a+=90;
   
-  if (a>90){
+  if (a>180){
    a=0; 
   }
 }
