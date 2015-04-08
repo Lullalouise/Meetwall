@@ -16,6 +16,7 @@ import processing.net.*;
 
 SimpleOpenNI  context;
 Client myClient;
+Fluid fluid;
 
 color[] userClr = new color[] { 
   color(255, 0, 0), 
@@ -67,6 +68,7 @@ void setup()
   size(640, 480);
    // myClient = new Client(this,"192.168.2.1",9999);
   context = new SimpleOpenNI(this);
+  fluid = new Fluid();
   KiSetup();
   ScreenSaverSetUp();
   tileSetUp();
@@ -128,6 +130,8 @@ if (kinect) {
       case 0: 
         kiLoop(userList);
       case 1:
+        fluid.userMoved(1, 1, 1, 1);
+        fluid.updateCells();
         fluid(userList);
       }
     }
