@@ -31,7 +31,7 @@ int[] membres = {
 };
 
 ArrayList tileCollection= new ArrayList();
-ArrayList<PVector> pointCollection= new ArrayList();
+ArrayList<PVector> pointCollection = new ArrayList();
 
 boolean userDetected = false;
 boolean userDetectedNow = false;
@@ -52,7 +52,7 @@ int cols = 19;
 
 int screensaver = 0;
 int NUM_SCREENSAVERS = 3;
-int kinectApp = 0; 
+int kinectApp = 1;
 int NUM_KINECT_APPS = 2;
   // Allows to switch across different interactive animations
   // 0 : MeetWalll
@@ -92,7 +92,7 @@ void draw() {
 if (kinect) {
   context.update();
   // draw depthImageMap
-  image(context.depthImage(),0,0);
+  image(context.depthImage(), 0, 0);
 
   // draw the skeleton if it's available
   int[] userList = context.getUsers();
@@ -102,6 +102,7 @@ if (kinect) {
  */
 
   userDetectedNow = (userList.length > 0);
+  
   if (!userDetectedNow) {
     // No user now
     if (userDetected) {
@@ -113,8 +114,8 @@ if (kinect) {
     } else { 
       //  No users for two loops, activate screenSaver
       ScreenSaverloop();
-     // tileLoop();
-     // println("screensaverloop");
+      tileLoop();
+     println("screensaverloop");
     }
   } else {
     // There is a user now
@@ -126,13 +127,12 @@ if (kinect) {
         userDetected = true;
     } else {
       // The user was here before, keep running the Kinect anim
+      // println("Keep running Kinect");
       switch(kinectApp) {
       case 0: 
         kiLoop(userList);
       case 1:
-        fluid.userMoved(1, 1, 1, 1);
-        fluid.updateCells();
-        fluid(userList);
+        fluid.handleKinect(context);
       }
     }
   }
@@ -141,7 +141,7 @@ if (kinect) {
   ScreenSaverloop();  
 }
 
-tileLoop(); 
+tileLoop();
 pointCollection.clear(); 
 }
 
@@ -154,3 +154,4 @@ pointCollection.clear();
       myClient.write(byteBuffer);
 
 }*/
+

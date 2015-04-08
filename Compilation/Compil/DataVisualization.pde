@@ -5,7 +5,7 @@ void tileSetUp() {
   marginCo = (swidth%(l*cols))/2;
   println(l);
   marginHB = (sheight%(l*rows))/2;
- //  println(marginHB);
+  //  println(marginHB);
   rectMode(RADIUS);
 
   //tile position definition 
@@ -33,27 +33,28 @@ void tileLoop() {
           mindist=dist; //keeping closest face to process
         }
       }
+    }
 
-      if (mindist<actionRadius) { // acting only on the tiles in the actionRadius.
-        byteBuffer[j]=byte(int((1-(mindist/actionRadius))*90));
-        tileHeight[j]=mindist*(l/2)/actionRadius;
+    if (mindist<actionRadius) { // acting only on the tiles in the actionRadius.
+      byteBuffer[j]=byte(int((1-(mindist/actionRadius))*90));
+      tileHeight[j]=mindist*(l/2)/actionRadius;
 
 
-        //  print (int(1/mindist*actionRadius/90),"    ");
-      } else { //doing nothing if out of actionRadius
-        tileHeight[j]=l/2;
+      //  print (int(1/mindist*actionRadius/90),"    ");
+    } else { //doing nothing if out of actionRadius
+      tileHeight[j]=l/2;
 
       byteBuffer[j]=byte(0);
-      }
-    //  print(byteBuffer+"*");
     }
-    
-    fill(255, 20, 147);
-    rect(myv.x, myv.y, l/2, tileHeight[j]);
-    fill(255);
-    textAlign(CENTER);
-    text(j, myv.x, myv.y);
+    //  print(byteBuffer+"*");
   }
+
+  fill(255, 20, 147);
+  rect(myv.x, myv.y, l/2, tileHeight[j]);
+  fill(255);
+  textAlign(CENTER);
+  text(j, myv.x, myv.y);
 }
+
 //  myClient.write(byteBuffer);
 
