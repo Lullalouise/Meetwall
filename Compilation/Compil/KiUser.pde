@@ -4,7 +4,6 @@ class KiUser {
   PVector[] position = {
     new PVector(0, 0, 0), new PVector(0, 0, 0), new PVector(0, 0, 0)
   };
-
   PVector[] position2d = {
     new PVector(0, 0, 0), new PVector(0, 0, 0), new PVector(0, 0, 0)
   };
@@ -31,8 +30,6 @@ class KiUser {
     context.convertRealWorldToProjective(position[num], NewPosition2d);
 
     float dist=PVector.dist(NewPosition2d, position2d[num]);
-
-
     //Smoothing movement
     if (dist<smooth && position2d[num].mag()==0) {
       position2d[num] = NewPosition2d;

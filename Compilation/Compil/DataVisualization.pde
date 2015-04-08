@@ -21,7 +21,7 @@ void tileLoop() {
   fill(255, 20, 147);
   stroke(255);
   for (int j=0; j<rows*cols; j++) {
-    float mindist=10000000;  
+    float mindist = 10000000;  
     Vec3D myv=(Vec3D) tileCollection.get(j);
 
     if (userDetected) {

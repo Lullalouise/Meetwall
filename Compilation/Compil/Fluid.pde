@@ -1,6 +1,7 @@
 import msafluid.*;
 
-final float FLUID_WIDTH = 20;
+final float FLUID_WIDTH = 19;
+final float FLUID_HEIGHT = 8;
 float invWidth, invHeight;    // inverse of screen dimensions
 float aspectRatio, aspectRatio2;
 
@@ -10,64 +11,51 @@ PImage imgFluid;
 boolean drawFluid = true;
 boolean renderUsingVA = true;
 
-void setup() {
-    size(960, 384); // use OPENGL rendering for bilinear filtering on texture
-    invWidth = 1.0f / width;
-    invHeight = 1.0f / height;
+class Fluid {
+  Fluid() {
+    invWidth = 1.0f / 960;
+    invHeight = 1.0f / 384;
     aspectRatio = width * invHeight;
     aspectRatio2 = aspectRatio * aspectRatio;
-
     // create fluid and set options
-    fluidSolver = new MSAFluidSolver2D((int)(FLUID_WIDTH), (int)(FLUID_WIDTH * height/width));
+    fluidSolver = new MSAFluidSolver2D((int)(FLUID_WIDTH), 
+      (int)(FLUID_HEIGHT));
     fluidSolver.enableRGB(true).setFadeSpeed(0.01).setDeltaT(0.5).setVisc(0.001);
 
     // create image to hold fluid picture
-    imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), RGB);
-
-    // init TUIO
+    imgFluid = createImage(fluidSolver.getWidth(), 
+      fluidSolver.getHeight(), RGB);
     initTUIO();
+  }
+
+void userMoved(X, Y, oldX, oldY) {
+    float normX = X * invWidth;
+    float normY = Y * invHeight;
+    float velX = (X - oldX) * invWidth;
+    float velY = (Y - oldY) * invHeight;
+    addForce(normX, normY, velX, velY);
 }
 
-
-void mouseMoved() {
-    float mouseNormX = mouseX * invWidth;
-    float mouseNormY = mouseY * invHeight;
-    float mouseVelX = (mouseX - pmouseX) * invWidth;
-    float mouseVelY = (mouseY - pmouseY) * invHeight;
-
-    addForce(mouseNormX, mouseNormY, mouseVelX, mouseVelY);
-}
-
-
-void draw() {
+void updateCells() {
     updateTUIO();
     fluidSolver.update();
     if(drawFluid) {
-        for(int i=0; i<fluidSolver.getNumCells(); i++) {
+        for(int i = 0; i < fluidSolver.getNumCells(); i++) {
             int d = 2;
             //imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d);
-            imgFluid.pixels[i] = color(RGBToGrayScale(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d));
-        }  
+            imgFluid.pixels[i] = color(RGBToGrayScale(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d)); }  
         imgFluid.updatePixels();//  fastblur(imgFluid, 2);
         image(imgFluid, 0, 0, width, height);
     } 
 }
 
-void mousePressed() {
-    drawFluid ^= true;
+byte convertToTileAngle(grayscale) {
+  return byte(int((90 * grayscale) / 256.));
 }
 
-void keyPressed() {
-    switch(key) {
-    case 'r': 
-        renderUsingVA ^= true; 
-        println("renderUsingVA: " + renderUsingVA);
-        break;
-    }
-    println(frameRate);
+float converToTileHeight(grayscale) {
+  return (l * grayscale) / (256. * 2.0);
 }
-
-
 // add force and dye to fluid, and create particles
 void addForce(float x, float y, float dx, float dy) {
     float speed = dx * dx  + dy * dy * aspectRatio2;    // balance the x and y components of speed with the screen aspect ratio
